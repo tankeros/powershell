@@ -3,3 +3,7 @@ dnscmd dc1 /recordadd jcloud.com ws3 /createptr A 192.168.1.145
 
 #creating a new dns record without PTR 
 dnscmd dc1 /recordadd jcloud.com ws5 A 192.168.1.147
+
+Set-ADServiceAccount -Identity gmsatest -PrincipalsAllowedToRetrieveManagedPassword server_name$
+
+Install-ADServiceAccount -Identity gmsatest
