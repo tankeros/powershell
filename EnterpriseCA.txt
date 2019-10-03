@@ -1,0 +1,44 @@
+Standalone CA Root CA
+	- Workgroup (doesn't need to join domain)
+	- RSA# Microsoft Software key Storage Provider 2048 SHA256
+	- NS2 HCM CRE ROOT CA (set to 20 years)
+	- From Certification Authority: Properties: Extensions CRL Distribution Point (CDP)
+	Insert new CDP: http://c20wsca02.hcm.cre.ns2.priv/CertData/<CaName><CRLNameSuffix><DeltaCRLAllowed>.crl
+	Include in CRL Clients use this to find Delta CRL locations
+	Include in CDP extention of iiss
+	Change to Authority Information Access (AIA)
+	Insert new AIA: http://c20wsca02.hcm.cre.ns2.priv/CertData/<ServerDNSName>_<CaName><CertificateName>.crt
+	Include in the AIA extension of issued certificates
+	Click apply, and OK
+	- In Certification Authority: Revoked Certificates -. Publish -> New CRL
+	- Open C:\Windows\System32\CertSrv\CertEnroll and copy .crl and .crt files
+	- Create a new share folder (for example C:\cert) and paste it
+	- In Certification Authority: Properties: View Certificate: Details: Copy to File: select: DER encoded binary X.509(.CER)
+	-  Browse to (for example C:\cert) and save as RootCA
+	- Copy all three files .crl, .crt, RootCA.cer
+	- Transfer all files to Issuing server (c20wsca02) (for example C:\cert)
+Domain Controller (DC)
+	- Transfer RootCA.cer to domain Controller (c20wsdc01) (for example C:\cert)
+	- Open Group Policy Management, create new GPO Trusted Root CA, edit Computer Configuration: Windows Setting: Security Setting: Public Key Policy: Trusted Root Certificate AuthorityImport RootCA and link GPO to domain
+	- Run gpupdate /force and mmc certificate and verify RootCA from Trusted Root Certification Authority 
+
+Enterprise CA Issuing CA
+	- Install roles for Certificate Authority and Certification Authority Web Enrollment
+	- Select Roles to configure: Certificate Authority and Certification Authority Web Enrollment
+	- Enterprise CA and Subordinate CA, Create a new private key
+	- RSA# Microsoft Software key Storage Provider 2048 SHA256
+	- Name: NS2 HCM CRE Issuing CA 
+	- Save a certificate request to file on the target machineC:\c20wsca02.hcm.cre.ns2.priv_hcm-C20WSCA02-CA.req
+	- Transfer request file to RootCA server (C:\cert)
+
+Standalone CA Root CA
+	- In Certification Authority:  Right click: All task: Submit new request¡¦: (wait, refresh) In Pending Requests: All task: Issue: In Issued Certificates: open certificate, in details: Copy to File to exportselect: Cryptographic Message Syntax Standard - PKCS #7 Certificates (.P7B)Include all certificates in the certification path if possiblebrowse and Save As IssuingCA (C:\cert)
+	- Transfer IssuingCA.p7b file to Issuing Server (C:\cert)
+Enterprise CA Issuing CA
+	- Open C:\inetpub\wwwroot
+	Create a new folder CertData
+	Copy .crl and .crt (CRL and AIA) to CertData folder
+	- Open Certification Authority: Right click: All task: Install CA Certificate¡¦select IssuingCA.p7b and wait few secondsStart CA services: check mmc for Intermediate CA
+
+Standalone CA Root CA
+	- Shutdown the server
