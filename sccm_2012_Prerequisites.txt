@@ -1,0 +1,45 @@
+Domain Controller:
+
+ExtADSch (Extend Active Directory Schema)
+- Add to user to Domain Admin and Schema Admin security group - logoff and login again
+
+
+Config Manager:
+
+Client:
+
+
+
+
+Windows Assessment and Deployment Kit (ADK)- adksetup (needs internet connection)
+
+MS SQL Firewall ports
+netsh advfirewall firewall add rule name="SQL Server" dir=in action=allow protocol=TCP localport=1433
+netsh advfirewall firewall add rule name="SQL Service Broker" dir=in action=allow protocol=TCP localport=4022
+
+Configmgr1:
+Download Windows Assessment and Deployment Kit (WADK)
+	- Deployment Tools
+	- Windows Preinstallation Environment (Windows PE)
+	- User State migration Tool (USMT)
+	
+
+Windows Feature:
+	- .NET 3.5 framework (D:\sources\sxs) needs media disk
+	- BITS
+	- RDC
+
+IIS Roles:
+	- Windows Authentication
+	- IIS Management Scripts and Tools
+	- IIS 6 WMI Management Compatibility
+	
+
+
+MS SQL Server 2012 CU3 or later
+	- SQL Server Database Engine set to Local System
+	- Install SQL then install CU3 update
+	- Minimum ram size 8192 MB (8 GB)
+
+Extend Active Directory Schema
+	- Extadsch.exe (SCCM folder SMSSETUP\BIN\X64)
